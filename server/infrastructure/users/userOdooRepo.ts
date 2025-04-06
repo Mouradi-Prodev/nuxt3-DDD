@@ -3,10 +3,13 @@ import { User } from "~/server/domain/users/user.model";
 import type { UserRepository } from "~/server/domain/users/user.repository";
 
 export class UserOdooRepo implements UserRepository {
-  constructor(private odooClient: any) {}
+  constructor(private odooClient: { searchRead: (model: string, domain: unknown[], fields: string[]) => Promise<OdooData[]> }) {}
 
   async findAll(): Promise<User[]> {
     try {
+      if (!this.odooClient || typeof (this.odooClient).searchRead !== "function") {
+        throw new Error("Invalid Odoo client or missing searchRead method");
+      }
       const response = await this.odooClient.searchRead(
         "res.users",
         [],
