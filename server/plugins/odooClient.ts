@@ -1,4 +1,4 @@
-class OdooClient {
+export class OdooClient {
   async searchRead(model: string, _domain: unknown[], _fields: string[]) {
     console.log(`Mock OdooClient: Fetching ${model} }`);
 
